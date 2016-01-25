@@ -1,3 +1,9 @@
+--- google's word to vector 300 utility
+-- w2vvocab: string -> index
+-- v2wvocab: index -> string
+-- M: matrix: |V|, 300
+--
+
 torch.setdefaulttensortype('torch.FloatTensor')
 
 local opt = {
