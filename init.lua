@@ -4,18 +4,17 @@
 -- M: matrix: |V|, 300
 --
 
-torch.setdefaulttensortype('torch.FloatTensor')
-
 local opt = {
 	binfilename = '/home/ps/data/googlenews/GoogleNews-vectors-negative300.bin',
 	t7filename = '/home/ps/data/googlenews/word2vec.t7'
 }
 
+local VEC_SIZE = 300 -- dim 300 vector for each word
+
 local function bintot7(opt)
 	print('bintot7: read bin file from ' .. opt.binfilename)
 	local file = torch.DiskFile(opt.binfilename,'r')
 	local max_w = 50
-	local VEC_SIZE = 300 -- dim 300 vector for each word
 
 	local function readStringv2(file)
 		local str = {}
@@ -66,10 +65,10 @@ end
 
 local w2vutils = {}
 if not paths.filep(opt.t7filename) then
-	print('generating word2vec t7 data at ' .. opt.t7filename)
+	print('generating word2vec t7 data at ' .. opt.t7filename .. ' ...')
 	w2vutils = bintot7(opt)
 else
-	print('reading word2vec t7 dataat ' .. opt.t7filename)
+	print('reading word2vec t7 data at ' .. opt.t7filename .. ' ...')
 	w2vutils = torch.load(opt.t7filename)
 end
 
@@ -96,6 +95,10 @@ w2vutils.word2vec = function (self,word,throwerror)
 		assert(ind ~= nil, 'Word does not exist in the dictionary!')
    end
    return self.M[ind]
+end
+
+w2vutils.vec_size = function (self)
+	return VEC_SIZE
 end
 
 return w2vutils
